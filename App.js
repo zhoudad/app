@@ -5,12 +5,14 @@ import RootPage from './src/RootPage.js'
 const App = createStackNavigator({
   Login: {
     screen: LoginScreen,
-    // navigationOptions: ({ navigation }) => ({ header: null, gesturesEnable: true })
+    navigationOptions: ({ navigation }) => ({ header: null, gesturesEnable: true })
   },
   Main: {
     screen: RootPage,
-    // navigationOptions: ({ navigation }) => ({ header: null, gesturesEnable: true })
+    navigationOptions: ({ navigation }) => ({ header: null, gesturesEnable: true })
   },
+},{
+  initialRouteName:'Login'
 }
 );
 
