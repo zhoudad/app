@@ -10,9 +10,9 @@ export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      passWord: ''
     };
+    this.save = this.save.bind(this)
+    this.login = this.login.bind(this)
   }
   //获取账号
   getUserInfoName = (text) => {
@@ -22,45 +22,48 @@ export default class Login extends Component {
   getUserInfoPassw = (text) => {
     this.userInfo.userPassword = text
   }
-  componentDidMount() {
-    this.loadInitialState();
-  }
+  // componentDidMount() {
+  //   this.loadInitialState();
+  // }
   //初始化数据-默认从AsyncStorage中获取数据
-  loadInitialState() {
-    var _that = this;
-    var keys = ['userNmae', 'userPassword'];
-    AsyncStorage.multiGet(keys, function (errs, result) {
-      if (errs) {
-        return;
-      }
-      _that.props.navigation.replace('Main')
-      // _that.setState({
-      //   name: (result[0][1] != null) ? result[0][1] : '',
-      //   PassWord: (result[1][1] != null) ? result[1][1] : ''
-      // });
-    });
-  }
+  // loadInitialState() {
+  //   var _that = this;
+  //   var userInfo = ['userNmae', 'userPassword'];
+  //   AsyncStorage.multiGet(userInfo, function (errs, result) {
+  //     console.log(result)
+  //     if (result[0] != null || result[1] != null) {
+  //       _that.props.navigation.replace('Main')
+  //     }else{
+  //       return;
+  //     }
+  //   });
+  // }
 
-  save() {
+  async save() {
     var userInfo = [
       ['userNmae', this.userInfo.userNmae],
       ['userPassword', this.userInfo.userPassword]
     ]
-    AsyncStorage.multiSet(keyValuePairs, function (errs) {
-      if (errs) {
-        return;
-      }
-    });
+    try {
+      await AsyncStorage.multiSet(userInfo, function (errs) {
+        
+      })
+    }catch(error) {
+      return 
+    }
   }
-  login = () => {
-    if (this.userInfo.userNmae == '0000' && this.userInfo.userPassword == '0000') {
-      ToastAndroid.show('登录成功', ToastAndroid.SHORT);
-      this.save();
-      this.props.navigation.replace('Main')
-    } else {
+  async login () {
+    try {
+      if (this.userInfo.userNmae == '0000' && this.userInfo.userPassword == '0000') {
+        ToastAndroid.show('登录成功', ToastAndroid.SHORT);
+        this.save();
+        this.props.navigation.replace('Main')
+      } 
+    }catch(error) {
       ToastAndroid.show('登录失败', ToastAndroid.SHORT);
     }
   }
+
 
   render() {
     return (

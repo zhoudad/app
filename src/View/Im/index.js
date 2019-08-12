@@ -1,44 +1,181 @@
-import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
-var REQUEST_URL =
-  "https://www.easy-mock.com/mock/5d2d1f6d6679d37b6cba98cb/example/upload";
-export default class IMScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
-      loaded: false,
-    };
-    this.fetchData = this.fetchData.bind(this);
+ import React from 'react';
+import { View, Text, StyleSheet, Image, PermissionsAndroid, Platform } from 'react-native';
+import Geolocation from '@react-native-community/geolocation';
+
+export default class Im extends React.Component {
+  state = {
+    currentLongitude: 'unknown',
+    currentLatitude: 'unknown',
+    key: 'd6225bb8abda80a26f2bc3a130d3137a',
+    position: 'unknown'
   }
-  // componentDidMount() {
-  //   this.fetchData();
+  componentDidMount = () => {
+    var that = this;
+    if (Platform.OS === 'ios') {
+      that.getPositions();
+    } else {
+      async function requestLocationPermission() {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+              'title': 'Location Access Required',
+              'message': 'This App needs to Access your location'
+            }
+          )
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            // that.callLocation(that);
+            that.getPositions();
+          } else {
+            alert("Permission Denied");
+          }
+        } catch (err) {
+          alert("err", err);
+          // console.warn(err)
+        }
+      }
+      requestLocationPermission();
+    }
+  }
+  callLocation(that) {
+    //alert("callLocation Called");
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const currentLongitude = JSON.stringify(position.coords.longitude);
+        const currentLatitude = JSON.stringify(position.coords.latitude);
+        // that.setState({ currentLongitude: currentLongitude });
+        //Setting state Longitude to re re-render the Longitude Text
+        // that.setState({ currentLatitude: currentLatitude });
+        //Setting state Latitude to re re-render the Longitude Text
+      },
+      (error) => alert(error.message),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+    // that.watchID = Geolocation.watchPosition((position) => {
+    //   //Will give you the location on location change
+    //   console.log(position);
+    //   const currentLongitude = JSON.stringify(position.coords.longitude);
+    //   //getting the Longitude from the location json
+    //   const currentLatitude = JSON.stringify(position.coords.latitude);
+    //   //getting the Latitude from the location json
+    //   that.setState({ currentLongitude: currentLongitude });
+    //   //Setting state Longitude to re re-render the Longitude Text
+    //   that.setState({ currentLatitude: currentLatitude });
+    //   //Setting state Latitude to re re-render the Longitude Text
+    // });
+  }
+  // componentWillUnmount = () => {
+  //   Geolocation.clearWatch(this.watchID);
   // }
-  fetchData() {
-    let formdata = new FormData
-    formdata.append(`tel`,`1234567`)
-    fetch(REQUEST_URL,{
-      method:'POST',
-      body:formdata
+
+
+  getPositions = () => {
+    //获取位置再得到城市先后顺序，通过Promise完成
+    return new Promise((resolve, reject) => {
+      Geolocation.getCurrentPosition(
+        location => {
+          this.setState({
+            currentLongitude: location.coords.longitude,//经度
+            currentLatitude: location.coords.latitude,//纬度
+          });
+          console.log(this.state.currentLongitude)
+          console.log(this.state.currentLatitude)
+          fetch(`https://restapi.amap.com/v3/assistant/coordinate/convert?locations=${this.state.currentLongitude},${this.state.currentLatitude}&coordsys=gps&output=json&key=${this.state.key}`, { method: "GET" })
+            .then(response => response.json())
+            .then((jsonDa) => {
+              let newVar = jsonDa.locations.split(',')
+              try {
+                this.setState({
+                  currentLongitude: newVar[0],//经度
+                  currentLatitude: newVar[1],//纬度
+                });
+              }catch(error){
+                return
+              }
+              console.log(this.state.currentLongitude)
+              console.log(this.state.currentLatitude)
+              //访问网络开始
+              fetch('http://restapi.amap.com/v3/geocode/regeo?key=' + this.state.key + '&location=' + this.state.currentLongitude + ',' + this.state.currentLatitude + '&radius=1000&extensions=all&batch=false&roadlevel=0', {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: ``
+              })
+                .then((response) => response.json())
+                .then((jsonData) => {
+                  try {
+                    console.log(jsonData)
+                    //Toast.show(jsonData.result.formatted_address+jsonData.result.sematic_description)
+                    this.setState({
+                      position: jsonData.regeocode.addressComponent.province,
+                    });
+                  } catch (e) {
+
+                  }
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+              //访问网络结束
+            })
+            .catch(error => {
+              reject(error);
+            });
+        },
+        error => {
+          reject(error);
+          if (error.code == 2) {
+            ToastAndroid.show('定位失败，请查看手机是否开启GPS定位服务', ToastAndroid.SHORT);
+          } else if (error.code == 3) {
+            ToastAndroid.show("定位超时，请尝试重新获取定位", ToastAndroid.SHORT);
+          } else {
+            ToastAndroid.show("定位失败：" + error.message, ToastAndroid.SHORT);
+          }
+        }, {
+          enableHighAccuracy: false,
+          timeout: 5000,
+          maximumAge: 10000
+        }
+      );
+
     })
-      .then((response) => response.json())
-      .then((responseData) => {
-        console.log(responseData)
-        this.setState({
-          data: this.state.data.concat(responseData),
-        });
-      });
+
   }
+
   render() {
     return (
-      <View>
-        <Text> IMScreen </Text>
-        <Button
-            onPress={() => this.fetchData()}
-            title="POST"
-            color="#ccc"
+      <View style={styles.container}>
+        <Image
+          source={{ uri: 'https://png.icons8.com/dusk/100/000000/compass.png' }}
+          style={{ width: 100, height: 100 }}
         />
+        <Text style={styles.boldText}>
+          You are Here
+          </Text>
+        <Text style={{ justifyContent: 'center', alignItems: 'center', marginTop: 16 }}>
+          Longitude: {this.state.currentLongitude}
+        </Text>
+        <Text style={{ justifyContent: 'center', alignItems: 'center', marginTop: 16 }}>
+          Latitude: {this.state.currentLatitude}
+        </Text>
+        <Text style={{ justifyContent: 'center', alignItems: 'center', marginTop: 16 }}>
+          Position: {this.state.position}
+        </Text>
       </View>
-    );
+    )
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 50,
+    padding: 16,
+    backgroundColor: 'white'
+  },
+  boldText: {
+    fontSize: 30,
+    color: 'red',
+  }
+})

@@ -13,8 +13,10 @@ const RootPage = createBottomTabNavigator({
                 <Ionicons
                     name={focused ? 'list' : 'list-1'}
                     size={26}
+                    color={focused ? '#51e0ce' : '#222'}
                 />
             ),
+            activeTintColor : 'green'
         }
     },
     Im: {
@@ -23,10 +25,11 @@ const RootPage = createBottomTabNavigator({
             tabBarLabel: 'Im',
             tabBarIcon: ({tintColor, focused}) => (
                 <Ionicons
-                    name={focused ? 'im' : 'im-1'}
+                    name={focused ? 'im-1' : 'im'}
                     size={26}
+                    color={focused ? '#51e0ce' : '#222'}
                 />
-            ),
+            )
         }
     },
     My: {
@@ -37,10 +40,17 @@ const RootPage = createBottomTabNavigator({
                 <Ionicons
                     name={focused ? 'my' : 'my-1'}
                     size={26}
+                    color={focused ? '#51e0ce' : '#222'}
                 />
             ),
+            activeTintColor : 'green'
         }
     },
+},{
+    tabBarOptions:{
+        activeTintColor: '#51e0ce',
+        pressOpacity: 0.8,
+    }
 });
 
 export default createAppContainer(RootPage);
