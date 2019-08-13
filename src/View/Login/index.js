@@ -22,22 +22,21 @@ export default class Login extends Component {
   getUserInfoPassw = (text) => {
     this.userInfo.userPassword = text
   }
-  // componentDidMount() {
-  //   this.loadInitialState();
-  // }
-  //初始化数据-默认从AsyncStorage中获取数据
-  // loadInitialState() {
-  //   var _that = this;
-  //   var userInfo = ['userNmae', 'userPassword'];
-  //   AsyncStorage.multiGet(userInfo, function (errs, result) {
-  //     console.log(result)
-  //     if (result[0] != null || result[1] != null) {
-  //       _that.props.navigation.replace('Main')
-  //     }else{
-  //       return;
-  //     }
-  //   });
-  // }
+  componentDidMount() {
+    this.loadInitialState();
+  }
+  async loadInitialState() {
+    var _that = this;
+    var userInfo = ['userNmae', 'userPassword'];
+    AsyncStorage.multiGet(userInfo, function (errs, result) {
+      console.log(result[0][1])
+      if (result[0][1] != null || result[1][1] != null) {
+        _that.props.navigation.replace('Main')
+      }else{
+        return;
+      }
+    });
+  }
 
   async save() {
     var userInfo = [
@@ -46,7 +45,6 @@ export default class Login extends Component {
     ]
     try {
       await AsyncStorage.multiSet(userInfo, function (errs) {
-        
       })
     }catch(error) {
       return 

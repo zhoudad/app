@@ -5,6 +5,7 @@ import {
   View,
   AsyncStorage,
   TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 export default class My extends Component {
   constructor(props) {
@@ -14,8 +15,14 @@ export default class My extends Component {
   }
 
   async removeInfo() {
+    var _that = this;
+    var userInfo = ['userNmae', 'userPassword'];
     try {
-      await AsyncStorage.removeItem(userInfo);
+      await AsyncStorage.multiRemove(userInfo,err => {
+        return
+      });
+      ToastAndroid.show('清除完成', ToastAndroid.SHORT);
+      // _that.props.navigation.replace('Login')
     } catch (error) {
       return
     }

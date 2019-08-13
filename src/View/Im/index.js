@@ -1,4 +1,4 @@
- import React from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, Image, PermissionsAndroid, Platform } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 
@@ -7,7 +7,8 @@ export default class Im extends React.Component {
     currentLongitude: 'unknown',
     currentLatitude: 'unknown',
     key: 'd6225bb8abda80a26f2bc3a130d3137a',
-    position: 'unknown'
+    province: 'unknown',
+    district: 'unknown'
   }
   componentDidMount = () => {
     var that = this;
@@ -17,10 +18,7 @@ export default class Im extends React.Component {
       async function requestLocationPermission() {
         try {
           const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
-              'title': 'Location Access Required',
-              'message': 'This App needs to Access your location'
-            }
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
           )
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
             // that.callLocation(that);
@@ -77,8 +75,6 @@ export default class Im extends React.Component {
             currentLongitude: location.coords.longitude,//经度
             currentLatitude: location.coords.latitude,//纬度
           });
-          console.log(this.state.currentLongitude)
-          console.log(this.state.currentLatitude)
           fetch(`https://restapi.amap.com/v3/assistant/coordinate/convert?locations=${this.state.currentLongitude},${this.state.currentLatitude}&coordsys=gps&output=json&key=${this.state.key}`, { method: "GET" })
             .then(response => response.json())
             .then((jsonDa) => {
@@ -88,11 +84,9 @@ export default class Im extends React.Component {
                   currentLongitude: newVar[0],//经度
                   currentLatitude: newVar[1],//纬度
                 });
-              }catch(error){
+              } catch (error) {
                 return
               }
-              console.log(this.state.currentLongitude)
-              console.log(this.state.currentLatitude)
               //访问网络开始
               fetch('http://restapi.amap.com/v3/geocode/regeo?key=' + this.state.key + '&location=' + this.state.currentLongitude + ',' + this.state.currentLatitude + '&radius=1000&extensions=all&batch=false&roadlevel=0', {
                 method: "POST",
@@ -104,10 +98,11 @@ export default class Im extends React.Component {
                 .then((response) => response.json())
                 .then((jsonData) => {
                   try {
-                    console.log(jsonData)
                     //Toast.show(jsonData.result.formatted_address+jsonData.result.sematic_description)
                     this.setState({
-                      position: jsonData.regeocode.addressComponent.province,
+                      province: jsonData.regeocode.addressComponent.province,
+                      city: jsonData.regeocode.addressComponent.city,
+                      district: jsonData.regeocode.addressComponent.district,
                     });
                   } catch (e) {
 
@@ -159,7 +154,13 @@ export default class Im extends React.Component {
           Latitude: {this.state.currentLatitude}
         </Text>
         <Text style={{ justifyContent: 'center', alignItems: 'center', marginTop: 16 }}>
-          Position: {this.state.position}
+          province: {this.state.province}
+        </Text>
+        <Text style={{ justifyContent: 'center', alignItems: 'center', marginTop: 16 }}>
+          city: {this.state.city}
+        </Text>
+        <Text style={{ justifyContent: 'center', alignItems: 'center', marginTop: 16 }}>
+          district: {this.state.district}
         </Text>
       </View>
     )
