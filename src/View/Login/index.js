@@ -52,7 +52,7 @@ export default class Login extends Component {
   }
   async login () {
     try {
-      if (this.userInfo.userNmae == '0000' && this.userInfo.userPassword == '0000') {
+       if (this.userInfo.userNmae == '0000' && this.userInfo.userPassword == '0000') {
         ToastAndroid.show('登录成功', ToastAndroid.SHORT);
         this.save();
         this.props.navigation.replace('Main')

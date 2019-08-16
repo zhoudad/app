@@ -1,137 +1,66 @@
-// import React from 'react';
-// import { StyleSheet, Text, View, Dimensions } from 'react-native';
-// import Carousel from 'react-native-snap-carousel';
-
-// export default class App extends React.Component {
-//   constructor() {
-//     super()
-//     this.state = {
-//       entries: [
-//         { title: 'hello' },
-//         { title: 'world' },
-//         { title: 'world' },
-//         { title: 'world' },
-//         { title: 'world' },
-//         { title: 'world' },
-//       ]
-//     }
-//   }
-//   _renderItem({ item, index }) {
-//     return (
-//       <View style={styles.slide}>
-//         <Text style={styles.title}>{item.title}</Text>
-//       </View>
-//     );
-//   }
-//   render() {
-//     return (
-//       <Carousel
-//         layout={'tinder'}
-//         layoutCardOffset={`9`}
-//         ref={(c) => { this._carousel = c; }}
-//         data={this.state.entries}
-//         renderItem={this._renderItem}
-//         sliderWidth={Dimensions.get('window').width}
-//         itemWidth={Dimensions.get('window').width}
-//       />
-//     );
-//   }
-// }
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#ddd',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   title: {
-//     backgroundColor: '#ddd',
-//     height: Dimensions.get('window').height,
-//     lineHeight: Dimensions.get('window').height,
-//     fontSize: 30,
-//     textAlign: 'center'
-//   }
-// });
-
-
-
-
-
-
 import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 
-import Swiper from 'react-native-swiper';
-
+const screenWidth = Dimensions.get('window').width
 export default class Home extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props);
     this.state = {
-      entries: [
-        { title: 'hello' },
-        { title: 'world' },
-        { title: 'world' },
-        { title: 'world' },
-        { title: 'world' },
-        { title: 'world' },
-      ]
-    }
-  }
-    render(){
-      return (
-        <Swiper style={styles.wrapper}>
-          {
-            this.state.entries.map((item,index) => {
-              return (
-                <View style={styles.slide1}>
-                  <Text style={styles.text}>{item.title}</Text>
-                </View>
-              )
-            })
-          }
-          {/* <View style={styles.slide1}>
-            <Text style={styles.text}>Hello Swiper</Text>
-          </View>
-          <View style={styles.slide2}>
-            <Text style={styles.text}>Beautiful</Text>
-          </View>
-          <View style={styles.slide3}>
-            <Text style={styles.text}>And simple</Text>
-          </View> */}
-        </Swiper>
-      );
-    }
+    };
   }
 
-  const styles = StyleSheet.create({
-    wrapper: {
-    },
-    slide1: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#9DD6EB',
-    },
-    slide2: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#97CAE5',
-    },
-    slide3: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#92BBD9',
-    },
-    text: {
-      color: '#fff',
-      fontSize: 30,
-      fontWeight: 'bold',
-    }
-  })
+  render() {
+    const { navigation } = this.props
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+        <TouchableOpacity
+          style={styles.PageButton}
+          onPress={() => {
+            navigation.navigate('Page1', { name: '动态' })
+          }}
+          activeOpacity={0.8}
+        >
+          <Text style={{textAlign:'center',lineHeight:50}}>Go page1</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.PageButton}
+          onPress={() => {
+            navigation.navigate('Page2')
+          }}
+          activeOpacity={0.8}
+        >
+          <Text style={{textAlign:'center',lineHeight:50}}>Go page2</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.PageButton}
+          onPress={() => {
+            navigation.navigate('Page3', { name: 'Div' })
+          }}
+          activeOpacity={0.8}
+        >
+          <Text style={{textAlign:'center',lineHeight:50}}>Go page3</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.PageButton}
+          onPress={() => {
+            navigation.navigate('TopPage')
+          }}
+          activeOpacity={0.8}
+        >
+          <Text style={{textAlign:'center',lineHeight:50}}>Go TopPage</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+}
+const styles = StyleSheet.create({
+  PageButton: {
+    width: screenWidth * 0.8,
+    height: 50,
+    backgroundColor: '#ddd',
+    borderRadius: 5,
+    marginVertical: 20,
+    // textAlign:'center',
+    // lineHeight:50,
+  }
+})

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, PermissionsAndroid, Platform } from 'react-native';
+import { View, Text, StyleSheet, Image, PermissionsAndroid, Platform ,ToastAndroid} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 
 export default class Im extends React.Component {

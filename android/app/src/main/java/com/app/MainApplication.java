@@ -1,4 +1,4 @@
-package com.app;
+package com.infinityim;
 
 import android.app.Application;
 import android.util.Log;

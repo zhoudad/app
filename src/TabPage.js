@@ -13,7 +13,7 @@ const RootPage = createBottomTabNavigator({
                 <Ionicons
                     name={focused ? 'list' : 'list-1'}
                     size={26}
-                    color={focused ? '#51e0ce' : '#222'}
+                    style={{color:tintColor}}
                 />
             ),
             activeTintColor : 'green'
@@ -27,7 +27,7 @@ const RootPage = createBottomTabNavigator({
                 <Ionicons
                     name={focused ? 'im-1' : 'im'}
                     size={26}
-                    color={focused ? '#51e0ce' : '#222'}
+                    style={{color:tintColor}}
                 />
             )
         }
@@ -40,10 +40,9 @@ const RootPage = createBottomTabNavigator({
                 <Ionicons
                     name={focused ? 'my' : 'my-1'}
                     size={26}
-                    color={focused ? '#51e0ce' : '#222'}
+                    style={{color:tintColor}}
                 />
             ),
-            activeTintColor : 'green'
         }
     },
 },{

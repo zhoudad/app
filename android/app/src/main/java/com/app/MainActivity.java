@@ -1,4 +1,4 @@
-package com.app;
+package com.infinityim;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivity;
