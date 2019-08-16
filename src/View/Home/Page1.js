@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 
-export default class page5 extends Component {
+export default class page1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,7 +11,7 @@ export default class page5 extends Component {
   render() {
     return (
       <View>
-        <Text> page5 </Text>
+        <Text> page1 </Text>
       </View>
     );
   }
