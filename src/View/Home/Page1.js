@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import SvgIcon from '../../SvgIcon'
 
 export default class page1 extends Component {
+  // const {navigation} = this.props
   constructor(props) {
     super(props);
     this.state = {
     };
   }
-
+  // toggleDrawer = () => {
+  //   //Props to open/close the drawer
+  //   this.props.navigationProps.toggleDrawer();
+  // };
   render() {
+    const { navigation } = this.props
     return (
-      <View>
-        <Text> page1 </Text>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Page1</Text>
       </View>
     );
   }

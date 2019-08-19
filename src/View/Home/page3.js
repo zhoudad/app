@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text,TouchableOpacity } from 'react-native';
+import SvgIcon from '../../SvgIcon'
 
 export default class page3 extends Component {
   constructor(props) {
@@ -7,11 +8,15 @@ export default class page3 extends Component {
     this.state = {
     };
   }
-
+  // toggleDrawer = () => {
+  //   //Props to open/close the drawer
+  //   this.props.navigationProps.toggleDrawer();
+  // };
   render() {
+    const { navigation } = this.props
     return (
-      <View>
-        <Text> page3 </Text>
+      <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+        <Text>Page3</Text>
       </View>
     );
   }
