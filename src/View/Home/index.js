@@ -58,6 +58,15 @@ export default class Home extends Component {
         >
           <Text style={{textAlign:'center',lineHeight:50}}>Go DrawerPage</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.PageButton}
+          onPress={() => {
+            navigation.navigate('FlatListComt')
+          }}
+          activeOpacity={0.8}
+        >
+          <Text style={{textAlign:'center',lineHeight:50}}>Go FaltList</Text>
+        </TouchableOpacity>
       </View>
     );
   }

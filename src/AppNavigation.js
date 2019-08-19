@@ -20,6 +20,7 @@ import Ionicons from './SvgIcon.js'
 import Page1 from './View/Home/Page1'
 import Page2 from './View/Home/page2'
 import Page3 from './View/Home/page3'
+import FlatListComt from './View/Home/FlatListComt'
 
 
 class NavigationDrawerStructure extends Component {
@@ -176,6 +177,12 @@ const TabPage = createBottomTabNavigator({
   });
 
 const AppStack = createStackNavigator({
+  FlatListComt: {
+    screen: FlatListComt,
+    navigationOptions: {
+      tabBarLabel: 'FlatListComt'
+    }
+  },
   Page1: {
     screen: Page1,
     gesturesEnable: true,
