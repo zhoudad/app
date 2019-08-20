@@ -11,7 +11,7 @@ import {
   createSwitchNavigator
   // SafeAreaView,
 } from 'react-navigation';
-import DrawerPage from './View/Drawer'
+// import DrawerPage from './View/Drawer'
 import LoginScreen from './View/Login'
 import HomeScreen from './View/Home'
 import ImScreen from './View/Im'
@@ -21,8 +21,9 @@ import Page1 from './View/Home/Page1'
 import Page2 from './View/Home/page2'
 import Page3 from './View/Home/page3'
 import FlatListComt from './View/Home/FlatListComt'
+import Chat from './View/Im/Chat'
 
-
+const TITLE_OFFSET = Platform.OS === 'ios' ? 70 : 56;
 class NavigationDrawerStructure extends Component {
   //Structure for the navigatin Drawer
   // toggleDrawer = () => {
@@ -42,49 +43,49 @@ class NavigationDrawerStructure extends Component {
   }
 }
 
-// const DrawerPage = createDrawerNavigator({
-//   Page1: {
-//     screen: Page1,
-//     navigationOptions: {
-//       drawerLabel: 'Page1',
-//       drawerIcon: ({ tintColor }) => {
-//         <MaterialIcon name='drafts' size={24} style={{ color: tintColor }} />
-//       }
-//     }
-//   },
-//   Page2: {
-//     screen: Page2,
-//     navigationOptions: {
-//       drawerLabel: 'Page2',
-//       drawerIcon: ({ tintColor }) => {
-//         <MaterialIcon name='move-to-inbox' size={24} style={{ color: tintColor }} />
-//       }
-//     }
-//   },
-//   Page3: {
-//     screen: Page3,
-//     navigationOptions: {
-//       drawerLabel: 'Page3',
-//       drawerIcon: ({ tintColor }) => {
-//         <MaterialIcon name='move-to-inbox' size={24} style={{ color: tintColor }} />
-//       }
-//     }
-//   },
-// }, {
-//     initialRouteName: 'Page1',
-//     contentOptions: {
-//       activeTintColor: '#e91e63'
-//     },
-//     // contentComponent: (props) => {
-//     //   <ScrollView style={{ backgroundColor: '#456', flex: 1, }}>
-//     //     <SafeAreaView
-//     //       forceInset={{ top: 'always', horizontal: 'never' }}
-//     //     >
-//     //       <DrawerItems {...props} />
-//     //     </SafeAreaView>
-//     //   </ScrollView>
-//     // }
-//   })
+const DrawerPage = createDrawerNavigator({
+  Home: {
+    screen: HomeScreen,
+    navigationOptions: {
+      drawerLabel: 'Home',
+      drawerIcon: ({ tintColor }) => {
+        <MaterialIcon name='drafts' size={24} style={{ color: tintColor }} />
+      }
+    }
+  },
+  Page2: {
+    screen: Page2,
+    navigationOptions: {
+      drawerLabel: 'Page2',
+      drawerIcon: ({ tintColor }) => {
+        <MaterialIcon name='move-to-inbox' size={24} style={{ color: tintColor }} />
+      }
+    }
+  },
+  Page3: {
+    screen: Page3,
+    navigationOptions: {
+      drawerLabel: 'Page3',
+      drawerIcon: ({ tintColor }) => {
+        <MaterialIcon name='move-to-inbox' size={24} style={{ color: tintColor }} />
+      }
+    }
+  },
+}, {
+    initialRouteName: 'Home',
+    contentOptions: {
+      activeTintColor: '#e91e63'
+    },
+    // contentComponent: (props) => {
+    //   <ScrollView style={{ backgroundColor: '#456', flex: 1, }}>
+    //     <SafeAreaView
+    //       forceInset={{ top: 'always', horizontal: 'never' }}
+    //     >
+    //       <DrawerItems {...props} />
+    //     </SafeAreaView>
+    //   </ScrollView>
+    // }
+  })
 
 
 const TopPage = createMaterialTopTabNavigator({
@@ -130,7 +131,7 @@ const TopPage = createMaterialTopTabNavigator({
 
 const TabPage = createBottomTabNavigator({
   Home: {
-    screen: HomeScreen,
+    screen: DrawerPage,
     navigationOptions: {
       tabBarLabel: 'list',
       tabBarIcon: ({ tintColor, focused }) => (
@@ -177,6 +178,21 @@ const TabPage = createBottomTabNavigator({
   });
 
 const AppStack = createStackNavigator({
+  Chat: {
+    screen: Chat,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Chat',
+      headerTitleStyle: {
+        textAlign: 'center',
+        flex: 1,
+        fontSize: 18,
+      },
+      headerTitleContainerStyle: {
+        left: TITLE_OFFSET,
+        right: TITLE_OFFSET,
+      },
+    }),
+  },
   FlatListComt: {
     screen: FlatListComt,
     navigationOptions: {
@@ -236,9 +252,7 @@ const AppStack = createStackNavigator({
   },
   DrawerPage: {
     screen: DrawerPage,
-    navigationOptions: {
-      title: 'DrawerPage',
-    }
+    navigationOptions: ({ navigation }) => ({ header: null, gesturesEnable: true })
   }
 }, {
     initialRouteName: 'Main'
