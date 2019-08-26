@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Button, ScrollView, View, TouchableOpacity } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
+import {connect} from 'react-redux'
+import {createReactNavigationRdeduxMiddleware,readuxifyNavigator} from 'react-navigation-redux-helpers'
 import {
   createStackNavigator,
   createAppContainer,
@@ -22,6 +24,7 @@ import Page2 from './View/Home/page2'
 import Page3 from './View/Home/page3'
 import FlatListComt from './View/Home/FlatListComt'
 import Chat from './View/Im/Chat'
+import GroupCom from './components/Group'
 
 const TITLE_OFFSET = Platform.OS === 'ios' ? 70 : 56;
 class NavigationDrawerStructure extends Component {
@@ -53,10 +56,10 @@ const DrawerPage = createDrawerNavigator({
       }
     }
   },
-  Page2: {
-    screen: Page2,
+  GroupCom: {
+    screen: GroupCom,
     navigationOptions: {
-      drawerLabel: 'Page2',
+      drawerLabel: 'GroupCom',
       drawerIcon: ({ tintColor }) => {
         <MaterialIcon name='move-to-inbox' size={24} style={{ color: tintColor }} />
       }
@@ -226,14 +229,14 @@ const AppStack = createStackNavigator({
       const { params } = state
       return {
         title: params.title ? params.title : 'page1',
-        // headerRight: (
-        //   <Button
-        //     title={params.mode === 'edit' ? '保存' : '编辑'}
-        //     onPress={() => {
-        //       setParams({ mode: params.mode === 'edit' ? '' : 'edit' })
-        //     }}
-        //   ></Button>
-        // ),
+        headerRight: (
+          <Button
+            title={params.mode === 'edit' ? '保存' : '编辑'}
+            onPress={() => {
+              setParams({ mode: params.mode === 'edit' ? '' : 'edit' })
+            }}
+          ></Button>
+        ),
         headerRight: <NavigationDrawerStructure navigationProps={navigation} />,
       }
     }

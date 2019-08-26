@@ -3,7 +3,8 @@ import SvgIcon from '../../SvgIcon'
 import * as WeChat from 'react-native-wechat';
 import { View, Text, ToastAndroid, TouchableOpacity, StyleSheet, TextInput, Dimensions, ScrollView } from 'react-native';
 // var Dimensions = require('Dimensions');
-import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from '@react-native-community/async-storage';
+import DeviceStorage from '../../DeviceStorage'
 var { screenHeight, screenWidth } = Dimensions.get('window');
 export default class Login extends Component {
   userInfo = {
@@ -27,12 +28,12 @@ export default class Login extends Component {
   }
   componentDidMount() {
     WeChat.registerApp('wxa309673c1ee433fa') 
-    this.loadInitialState();
+    // this.loadInitialState();
   }
   async loadInitialState() {
     var _that = this;
     var userInfo = ['userNmae', 'userPassword'];
-    AsyncStorage.multiGet(userInfo, function (errs, result) {
+    DeviceStorage.get(userInfo, function (errs, result) {
       if (result[0][1] != null || result[1][1] != null) {
         _that.props.navigation.navigate('App')
       }else{
@@ -46,18 +47,13 @@ export default class Login extends Component {
       ['userNmae', this.userInfo.userNmae],
       ['userPassword', this.userInfo.userPassword]
     ]
-    try {
-      await AsyncStorage.multiSet(userInfo, function (errs) {
-      })
-    }catch(error) {
-      return 
-    }
+    DeviceStorage.save('userInfo',userInfo)
   }
   async login () {
     try {
        if (this.userInfo.userNmae == '0000' && this.userInfo.userPassword == '0000') {
         ToastAndroid.show('登录成功', ToastAndroid.SHORT);
-        this.save();
+        // this.save();
         this.props.navigation.navigate('App')
       } 
     }catch(error) {

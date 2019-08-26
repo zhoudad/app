@@ -18,7 +18,7 @@ export default class My extends Component {
     var _that = this;
     var userInfo = ['userNmae', 'userPassword'];
     try {
-      await AsyncStorage.multiRemove(userInfo,err => {
+      await AsyncStorage.removeItem(userInfo,err => {
         return
       });
       ToastAndroid.show('清除完成', ToastAndroid.SHORT);
