@@ -1,5 +1,5 @@
 
-package com.infinityim.wxapi; 
+package com.youji.wxapi; 
 import android.app.Activity;  
 import android.os.Bundle;  
 import com.theweflex.react.WeChatModule;  

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavigationActions } from 'react-navigation'
 import {
   StyleSheet,
   Text,
@@ -27,12 +28,22 @@ export default class My extends Component {
       return
     }
   }
+  logOut(){
+    let resetAction = NavigationActions.reset({
+        index: 0,
+        actions: [
+            NavigationActions.navigate({routeName: 'Login'})
+        ]
+    });
+    this.props.navigation.dispatch(resetAction)
+    removeInfo()
+}
 
   render() {
     return (
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-        <TouchableOpacity onPress={this.removeInfo} style={styles.button}>
-          <Text style={{lineHeight:45,textAlign:'center',fontSize:17}}>清除Info</Text>
+        <TouchableOpacity onPress={this.logOut} style={styles.button}>
+          <Text style={{lineHeight:45,textAlign:'center',fontSize:17}}>退出登录</Text>
         </TouchableOpacity>
       </View>
     );

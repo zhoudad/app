@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import SvgIcon from '../../SvgIcon'
 import * as WeChat from 'react-native-wechat';
-import { View, Text, ToastAndroid, TouchableOpacity, StyleSheet, TextInput, Dimensions, ScrollView } from 'react-native';
+import { View, Text, ToastAndroid, AsyncStorage, TouchableOpacity, StyleSheet, TextInput, Dimensions, ScrollView } from 'react-native';
 // var Dimensions = require('Dimensions');
 // import AsyncStorage from '@react-native-community/async-storage';
-import DeviceStorage from '../../DeviceStorage'
+// import DeviceStorage from '../../DeviceStorage'
 var { screenHeight, screenWidth } = Dimensions.get('window');
 export default class Login extends Component {
   userInfo = {
@@ -27,36 +27,46 @@ export default class Login extends Component {
     this.userInfo.userPassword = text
   }
   componentDidMount() {
-    WeChat.registerApp('wxa309673c1ee433fa') 
-    // this.loadInitialState();
+    WeChat.registerApp('wxa309673c1ee433fa')
+    this.loadInitialState();
   }
   async loadInitialState() {
     var _that = this;
-    var userInfo = ['userNmae', 'userPassword'];
-    DeviceStorage.get(userInfo, function (errs, result) {
-      if (result[0][1] != null || result[1][1] != null) {
-        _that.props.navigation.navigate('App')
-      }else{
-        return;
-      }
-    });
+    try {
+      await AsyncStorage.getItem('userInfo', function (errs, result) {
+        console.log(result)
+        if (result != null ) {
+          _that.props.navigation.navigate('App')
+        } else {
+          return;
+        }
+      });
+    } catch (err) {
+      console.log(error)
+    }
+
   }
 
   async save() {
-    var userInfo = [
-      ['userNmae', this.userInfo.userNmae],
-      ['userPassword', this.userInfo.userPassword]
-    ]
-    DeviceStorage.save('userInfo',userInfo)
-  }
-  async login () {
+    let userInfo = {
+      'userNmae':this.userInfo.userNmae,
+      'userPassword': this.userInfo.userPassword
+    }
+    console.log(userInfo)
     try {
-       if (this.userInfo.userNmae == '0000' && this.userInfo.userPassword == '0000') {
+      await AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async login() {
+    try {
+      if (this.userInfo.userNmae == '0000' && this.userInfo.userPassword == '0000') {
         ToastAndroid.show('登录成功', ToastAndroid.SHORT);
-        // this.save();
+        this.save();
         this.props.navigation.navigate('App')
-      } 
-    }catch(error) {
+      }
+    } catch (error) {
       ToastAndroid.show('登录失败', ToastAndroid.SHORT);
     }
   }
@@ -93,7 +103,7 @@ export default class Login extends Component {
       case 0:
         //获取token值
         axios({
-          url:'https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxa309673c1ee433fa&secret=bfe9d1ed4b67b6c7c269feece3ada179&code=' + responseCode.code + '&grant_type=authorization_code'
+          url: 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxa309673c1ee433fa&secret=59a2bc97079509e511ab7d0721f1028c&code=' + responseCode.code + '&grant_type=authorization_code'
         })
           .then(res => {
             //授权成功，获取用户头像等信息
@@ -115,13 +125,12 @@ export default class Login extends Component {
   getUserInfoFormWx = (res) => {
     // console.log(res)
     axios({
-      url:'https://api.weixin.qq.com/sns/userinfo?access_token=' + res.access_token + '&openid=' + res.openid
+      url: 'https://api.weixin.qq.com/sns/userinfo?access_token=' + res.access_token + '&openid=' + res.openid
     }).then(res => {
-        // ToastAndroid.show('用户信息' + JSON.stringify(res),ToastAndroid.SHORT)
-        // console.log(res)
-        // this.props.navigation.navigate('Select')
-      }
-      ).catch(err => { })
+      // ToastAndroid.show('用户信息' + JSON.stringify(res),ToastAndroid.SHORT)
+      this.props.navigation.navigate('App')
+    }
+    ).catch(err => { })
   }
 
   render() {
@@ -140,12 +149,12 @@ export default class Login extends Component {
             onChangeText={this.getUserInfoPassw}
           ></TextInput>
         </View>
-        <TouchableOpacity style={styles.LoginButton} onPress={this.login}>
+        <TouchableOpacity style={styles.LoginButton} onPress={() => this.login()}>
           <Text style={{ textAlign: 'center', lineHeight: 40, fontSize: 18 }}>Login</Text>
         </TouchableOpacity>
         <View style={styles.otherLogin}>
-          <TouchableOpacity activeOpacity={0.8} onPress={() => {this.weixinLogin()}}>
-            <SvgIcon name='my' size={38}></SvgIcon>
+          <TouchableOpacity activeOpacity={0.8} onPress={() => { this.weixinLogin() }}>
+            <SvgIcon name='weixin-1' size={38}></SvgIcon>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -167,13 +176,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginBottom: 15
   },
-  otherLogin:{
-    marginTop:50,
-    alignItems:'center',
-    borderTopColor:'#ddd',
-    borderTopWidth:1,
-    height:80,
-    width:'100%',
-    justifyContent:'center'
+  otherLogin: {
+    marginTop: 50,
+    alignItems: 'center',
+    borderTopColor: '#ddd',
+    borderTopWidth: 1,
+    height: 80,
+    width: '100%',
+    justifyContent: 'center'
   }
 })

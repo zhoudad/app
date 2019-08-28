@@ -1,4 +1,4 @@
-package com.infinityim;
+package com.youji;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivity;
@@ -20,7 +20,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "app";
+        return "youji";
     }
       @Override
         protected ReactActivityDelegate createReactActivityDelegate() {

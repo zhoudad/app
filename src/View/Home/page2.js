@@ -16,7 +16,7 @@ export default class page2 extends Component {
     const { navigation } = this.props
     return (
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-        <Text>Page2</Text>
+        <Text>Home2</Text>
       </View>
     );
   }

@@ -1,4 +1,4 @@
-package com.infinityim;
+package com.youji;
 
 import android.app.Application;
 import android.util.Log;

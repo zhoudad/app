@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, ScrollView, View, TouchableOpacity } from 'react-native';
+import { Button, ScrollView, View, TouchableOpacity,Dimensions,Text } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import {connect} from 'react-redux'
 import {createReactNavigationRdeduxMiddleware,readuxifyNavigator} from 'react-navigation-redux-helpers'
@@ -17,6 +17,8 @@ import {
 import LoginScreen from './View/Login'
 import HomeScreen from './View/Home'
 import ImScreen from './View/Im'
+import PendingScreen from './View/Pending'
+import WriteScreen from './View/Write'
 import MyScreen from './View/My'
 import Ionicons from './SvgIcon.js'
 import Page1 from './View/Home/Page1'
@@ -27,6 +29,7 @@ import Chat from './View/Im/Chat'
 import GroupCom from './components/Group'
 
 const TITLE_OFFSET = Platform.OS === 'ios' ? 70 : 56;
+var { screenHeight, screenWidth } = Dimensions.get('window');
 class NavigationDrawerStructure extends Component {
   //Structure for the navigatin Drawer
   // toggleDrawer = () => {
@@ -35,6 +38,7 @@ class NavigationDrawerStructure extends Component {
   // };
   render() {
     const { navigation } = this.props
+    // console.log(screenWidth/3 )
     return (
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
@@ -95,81 +99,103 @@ const TopPage = createMaterialTopTabNavigator({
   Page1: {
     screen: Page1,
     navigationOptions: {
-      tabBarLabel: 'Page1'
+      tabBarLabel: 'Home1'
     }
   },
   Page2: {
     screen: Page2,
     navigationOptions: {
-      tabBarLabel: 'Page2'
+      tabBarLabel: 'Home2'
     }
   },
   Page3: {
     screen: Page3,
     navigationOptions: {
-      tabBarLabel: 'Page3'
+      tabBarLabel: 'Home3'
     }
   },
 }, {
     tabBarOptions: {
       tabStyle: {
-        minWidth: 50,
+        width:100,
+        fontSize:18,
       },
       upperCaseLabel: false,//是否大写
       scrollEnabled: true,//是否支持滑动
       style: {//整体样式
         backgroundColor: '#51e0ce',
+        width:screenWidth
       },
       indicatorStyle: {//tab下的指示器样式
-        height: 2,
-        backgroundColor: '#ddd',
-        // width: 50,
+        height: 3,
+        backgroundColor: '#fff',
+        width: 30,
+        marginStart:35,
       },
       labelStyle: {
-        fontSize: 13,
-        marginVertical: 6
+        fontSize: 14,
       }
     }
   })
 
 const TabPage = createBottomTabNavigator({
   Home: {
-    screen: DrawerPage,
+    screen: TopPage,
     navigationOptions: {
-      tabBarLabel: 'list',
+      // tabBarLabel: '首页',
       tabBarIcon: ({ tintColor, focused }) => (
-        <Ionicons
-          name={focused ? 'list' : 'list-1'}
-          size={26}
-          style={{ color: tintColor }}
-        />
+        <View style={{justifyContent:'center',alignItems:'center'}}>
+          <Ionicons name={'home-1'} size={20} style={{ color: tintColor }} />
+          <Text style={{marginTop:3,color:tintColor,fontSize:11}}>首页</Text>
+        </View>
       ),
-      activeTintColor: 'green'
+    }
+  },
+  Pending: {
+    screen: PendingScreen,
+    navigationOptions: {
+      tabBarLabel: '附近',
+      tabBarIcon: ({ tintColor, focused }) => (
+        <View style={{justifyContent:'center',alignItems:'center'}}>
+          <Ionicons name={'dingwei-1'} size={20} style={{ color: tintColor }} />
+          <Text style={{marginTop:3,color:tintColor,fontSize:11}}>附近</Text>
+        </View>
+      )
+    }
+  },
+  Write: {
+    screen: WriteScreen,
+    navigationOptions: {
+      // tabBarLabel: '1',
+      tabBarVisible:false,
+      tabBarIcon: ({ tintColor, focused }) => (
+        <View style={{width:28,height:22,borderRadius:3,backgroundColor:'#51e0ce'}}>
+          
+        </View>
+      )
     }
   },
   Im: {
     screen: ImScreen,
     navigationOptions: {
-      tabBarLabel: 'Im',
+      // tabBarLabel: '消息',
       tabBarIcon: ({ tintColor, focused }) => (
-        <Ionicons
-          name={focused ? 'im-1' : 'im'}
-          size={26}
-          style={{ color: tintColor }}
-        />
+        <View style={{justifyContent:'center',alignItems:'center'}}>
+          <Ionicons name={'xiaoxi-2'} size={20} style={{ color: tintColor }} />
+          <Text style={{marginTop:3,color:tintColor,fontSize:11}}>消息</Text>
+        </View>
       )
     }
   },
   My: {
     screen: MyScreen,
     navigationOptions: {
-      tabBarLabel: 'My',
+      tabBarLabel: '我的',
       tabBarIcon: ({ tintColor, focused }) => (
-        <Ionicons
-          name={focused ? 'my' : 'my-1'}
-          size={26}
-          style={{ color: tintColor }}
-        />
+        <View style={{justifyContent:'center',alignItems:'center'}}>
+          <Ionicons name={'wode-3'} size={20} style={{ color: tintColor }} />
+          <Text style={{marginTop:3,color:tintColor,fontSize:11}}>我的</Text>
+        </View>
       ),
     }
   },
@@ -177,6 +203,7 @@ const TabPage = createBottomTabNavigator({
     tabBarOptions: {
       activeTintColor: '#51e0ce',
       pressOpacity: 0.8,
+      showLabel:false,
     }
   });
 
