@@ -17,16 +17,17 @@ import {
 import LoginScreen from './View/Login'
 import HomeScreen from './View/Home'
 import ImScreen from './View/Im'
-import PendingScreen from './View/Pending'
+import NearByScreen from './View/NearBy'
 import WriteScreen from './View/Write'
 import MyScreen from './View/My'
 import Ionicons from './SvgIcon.js'
-import Page1 from './View/Home/Page1'
-import Page2 from './View/Home/page2'
-import Page3 from './View/Home/page3'
+import RecommendScreen from './View/Home/Recommend'
+import AttentionScreen from './View/Home/Attention'
+import WorldScreen from './View/Home/World'
 import FlatListComt from './View/Home/FlatListComt'
 import Chat from './View/Im/Chat'
 import GroupCom from './components/Group'
+import HeaderSearch from './components/HeaderSearch';
 
 const TITLE_OFFSET = Platform.OS === 'ios' ? 70 : 56;
 var { screenHeight, screenWidth } = Dimensions.get('window');
@@ -50,71 +51,83 @@ class NavigationDrawerStructure extends Component {
   }
 }
 
-const DrawerPage = createDrawerNavigator({
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: {
-      drawerLabel: 'Home',
-      drawerIcon: ({ tintColor }) => {
-        <MaterialIcon name='drafts' size={24} style={{ color: tintColor }} />
-      }
-    }
-  },
-  GroupCom: {
-    screen: GroupCom,
-    navigationOptions: {
-      drawerLabel: 'GroupCom',
-      drawerIcon: ({ tintColor }) => {
-        <MaterialIcon name='move-to-inbox' size={24} style={{ color: tintColor }} />
-      }
-    }
-  },
-  Page3: {
-    screen: Page3,
-    navigationOptions: {
-      drawerLabel: 'Page3',
-      drawerIcon: ({ tintColor }) => {
-        <MaterialIcon name='move-to-inbox' size={24} style={{ color: tintColor }} />
-      }
-    }
-  },
-}, {
-    initialRouteName: 'Home',
-    contentOptions: {
-      activeTintColor: '#e91e63'
-    },
-    // contentComponent: (props) => {
-    //   <ScrollView style={{ backgroundColor: '#456', flex: 1, }}>
-    //     <SafeAreaView
-    //       forceInset={{ top: 'always', horizontal: 'never' }}
-    //     >
-    //       <DrawerItems {...props} />
-    //     </SafeAreaView>
-    //   </ScrollView>
-    // }
-  })
+// const DrawerPage = createDrawerNavigator({
+//   Home: {
+//     screen: HomeScreen,
+//     navigationOptions: {
+//       drawerLabel: 'Home',
+//       drawerIcon: ({ tintColor }) => {
+//         <MaterialIcon name='drafts' size={24} style={{ color: tintColor }} />
+//       }
+//     }
+//   },
+//   GroupCom: {
+//     screen: GroupCom,
+//     navigationOptions: {
+//       drawerLabel: 'GroupCom',
+//       drawerIcon: ({ tintColor }) => {
+//         <MaterialIcon name='move-to-inbox' size={24} style={{ color: tintColor }} />
+//       }
+//     }
+//   },
+//   Page3: {
+//     screen: Page3,
+//     navigationOptions: {
+//       drawerLabel: 'Page3',
+//       drawerIcon: ({ tintColor }) => {
+//         <MaterialIcon name='move-to-inbox' size={24} style={{ color: tintColor }} />
+//       }
+//     }
+//   },
+// }, {
+//     initialRouteName: 'Home',
+//     contentOptions: {
+//       activeTintColor: '#e91e63'
+//     },
+//     // contentComponent: (props) => {
+//     //   <ScrollView style={{ backgroundColor: '#456', flex: 1, }}>
+//     //     <SafeAreaView
+//     //       forceInset={{ top: 'always', horizontal: 'never' }}
+//     //     >
+//     //       <DrawerItems {...props} />
+//     //     </SafeAreaView>
+//     //   </ScrollView>
+//     // }
+//   })
 
 
 const TopPage = createMaterialTopTabNavigator({
-  Page1: {
-    screen: Page1,
+  // Header:{
+  //   screen:createStackNavigator({
+  //     HeaderSearch:{
+  //       screen:HeaderSearch,
+  //       navigationOptions: ({ navigation }) => ({
+  //         header: null,
+  //         gesturesEnable: true
+  //       })
+  //     }
+  //   })
+  // },
+  Recommend: {
+    screen: RecommendScreen,
     navigationOptions: {
-      tabBarLabel: 'Home1'
+      tabBarLabel: '推荐'
     }
   },
-  Page2: {
-    screen: Page2,
+  Attention: {
+    screen: AttentionScreen,
     navigationOptions: {
-      tabBarLabel: 'Home2'
+      tabBarLabel: '关注'
     }
   },
-  Page3: {
-    screen: Page3,
+  World: {
+    screen: WorldScreen,
     navigationOptions: {
-      tabBarLabel: 'Home3'
+      tabBarLabel: '世界'
     }
   },
-}, {
+}, 
+{
     tabBarOptions: {
       tabStyle: {
         width:100,
@@ -140,7 +153,7 @@ const TopPage = createMaterialTopTabNavigator({
 
 const TabPage = createBottomTabNavigator({
   Home: {
-    screen: TopPage,
+    screen: HomeScreen,
     navigationOptions: {
       // tabBarLabel: '首页',
       tabBarIcon: ({ tintColor, focused }) => (
@@ -151,8 +164,8 @@ const TabPage = createBottomTabNavigator({
       ),
     }
   },
-  Pending: {
-    screen: PendingScreen,
+  NearBy: {
+    screen: NearByScreen,
     navigationOptions: {
       tabBarLabel: '附近',
       tabBarIcon: ({ tintColor, focused }) => (
@@ -229,45 +242,45 @@ const AppStack = createStackNavigator({
       tabBarLabel: 'FlatListComt'
     }
   },
-  Page1: {
-    screen: Page1,
-    gesturesEnable: true,
-    navigationOptions: ({ navigation }) => ({
-      // title: `${navigation.state.params.name}`,
-      title: `Page1`,
-      headerRight: <NavigationDrawerStructure navigationProps={navigation} />,
-    })
-  },
-  Page2: {
-    screen: Page2,
-    gesturesEnable: true,
-    navigationOptions: ({ navigation }) => ({
-      title: 'page2',
-      headerRight: <NavigationDrawerStructure navigationProps={navigation} />,
-    })
-  },
-  Page3: {
-    screen: Page3,
-    // header: null,
-    gesturesEnable: true,//侧滑返回上一级
-    navigationOptions: (props) => {
-      const { navigation } = props;
-      const { state, setParams } = navigation;
-      const { params } = state
-      return {
-        title: params.title ? params.title : 'page1',
-        headerRight: (
-          <Button
-            title={params.mode === 'edit' ? '保存' : '编辑'}
-            onPress={() => {
-              setParams({ mode: params.mode === 'edit' ? '' : 'edit' })
-            }}
-          ></Button>
-        ),
-        headerRight: <NavigationDrawerStructure navigationProps={navigation} />,
-      }
-    }
-  },
+  // Page1: {
+  //   screen: Page1,
+  //   gesturesEnable: true,
+  //   navigationOptions: ({ navigation }) => ({
+  //     // title: `${navigation.state.params.name}`,
+  //     title: `Page1`,
+  //     headerRight: <NavigationDrawerStructure navigationProps={navigation} />,
+  //   })
+  // },
+  // Page2: {
+  //   screen: Page2,
+  //   gesturesEnable: true,
+  //   navigationOptions: ({ navigation }) => ({
+  //     title: 'page2',
+  //     headerRight: <NavigationDrawerStructure navigationProps={navigation} />,
+  //   })
+  // },
+  // Page3: {
+  //   screen: Page3,
+  //   // header: null,
+  //   gesturesEnable: true,//侧滑返回上一级
+  //   navigationOptions: (props) => {
+  //     const { navigation } = props;
+  //     const { state, setParams } = navigation;
+  //     const { params } = state
+  //     return {
+  //       title: params.title ? params.title : 'page1',
+  //       headerRight: (
+  //         <Button
+  //           title={params.mode === 'edit' ? '保存' : '编辑'}
+  //           onPress={() => {
+  //             setParams({ mode: params.mode === 'edit' ? '' : 'edit' })
+  //           }}
+  //         ></Button>
+  //       ),
+  //       headerRight: <NavigationDrawerStructure navigationProps={navigation} />,
+  //     }
+  //   }
+  // },
   Main: {
     screen: TabPage,
     navigationOptions: ({ navigation }) => ({ header: null, gesturesEnable: true })
@@ -280,10 +293,10 @@ const AppStack = createStackNavigator({
       gesturesEnable: true
     })
   },
-  DrawerPage: {
-    screen: DrawerPage,
-    navigationOptions: ({ navigation }) => ({ header: null, gesturesEnable: true })
-  }
+  // DrawerPage: {
+  //   screen: DrawerPage,
+  //   navigationOptions: ({ navigation }) => ({ header: null, gesturesEnable: true })
+  // }
 }, {
     initialRouteName: 'Main'
   });
@@ -294,11 +307,20 @@ const AuthStack = createStackNavigator({
   },
 })
 
-export default createSwitchNavigator({
-  Auth: AuthStack,
-  App: AppStack
-}, {
-    initialRouteName: 'Auth'
-  })
+export default function configAppNavigator(isLoggedIn) {
+  return createSwitchNavigator({
+    Auth: AuthStack,
+    App: AppStack
+  }, {
+      // initialRouteName: isLoggedIn?'App':'Auth'
+      initialRouteName:'App'
+    })
+}
+// export default createSwitchNavigator({
+//   Auth: AuthStack,
+//   App: AppStack
+// }, {
+//     initialRouteName: 'Auth'
+//   })
 
 // export default createAppContainer(AppNavigation);

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import SvgIcon from '../../SvgIcon'
 import * as WeChat from 'react-native-wechat';
-import { View, Text, ToastAndroid, AsyncStorage, TouchableOpacity, StyleSheet, TextInput, Dimensions, ScrollView } from 'react-native';
+import request from '../../utils/request';
+import navigationUtil from '../../utils/navigation';
+import { saveToken } from '../../utils/storage';
+import { View, Text, ToastAndroid,Alert, AsyncStorage, TouchableOpacity, StyleSheet, TextInput, Dimensions, ScrollView } from 'react-native';
 // var Dimensions = require('Dimensions');
 // import AsyncStorage from '@react-native-community/async-storage';
 // import DeviceStorage from '../../DeviceStorage'
@@ -14,6 +17,8 @@ export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
+    //   userNmae: '',
+    // userPassword: ''
     };
     this.save = this.save.bind(this)
     this.login = this.login.bind(this)
@@ -28,7 +33,7 @@ export default class Login extends Component {
   }
   componentDidMount() {
     WeChat.registerApp('wxa309673c1ee433fa')
-    this.loadInitialState();
+    // this.loadInitialState();
   }
   async loadInitialState() {
     var _that = this;
@@ -59,17 +64,36 @@ export default class Login extends Component {
       console.log(error)
     }
   }
-  async login() {
-    try {
-      if (this.userInfo.userNmae == '0000' && this.userInfo.userPassword == '0000') {
-        ToastAndroid.show('登录成功', ToastAndroid.SHORT);
-        this.save();
-        this.props.navigation.navigate('App')
-      }
-    } catch (error) {
-      ToastAndroid.show('登录失败', ToastAndroid.SHORT);
-    }
-  }
+  // async login() {
+  //   try {
+  //     if (this.userInfo.userNmae == '0000' && this.userInfo.userPassword == '0000') {
+  //       ToastAndroid.show('登录成功', ToastAndroid.SHORT);
+  //       this.save();
+  //       this.props.navigation.navigate('App')
+  //     }
+  //   } catch (error) {
+  //     ToastAndroid.show('登录失败', ToastAndroid.SHORT);
+  //   }
+  // }
+  login = () => {
+    const { userNmae, userPassword } = this.state;
+    const self = this;
+    request({
+      method: 'POST',
+      url: '/login',
+      data: { userNmae, userPassword }
+    })
+      .then((data) => {
+        console.log('登录成功：' + JSON.stringify(data));
+        saveToken(data.data);
+        navigationUtil.reset(self.props.navigation, 'App');
+      })
+      .catch(err => {
+        console.log(err)
+        // Alert.alert('登录失败', err.message || err);
+      });
+  };
+
 
   weixinLogin = () => {
     console.log('login open')
