@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text,TouchableOpacity } from 'react-native';
 import SvgIcon from '../../SvgIcon'
 
-export default class page2 extends Component {
+export default class Attention extends Component {
   constructor(props) {
     super(props);
     this.state = {

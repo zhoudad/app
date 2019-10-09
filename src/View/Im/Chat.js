@@ -74,7 +74,7 @@ export default class Chat extends Component {
           }}
           style={styles.PlusChatBtn}
         >
-          <Text style={{ textAlign: 'center', lineHeight: 43, fontSize: 30 }}>+</Text>
+          <Text style={{ textAlign: 'center', lineHeight: 40, fontSize: 30 }}>+</Text>
         </TouchableOpacity>
       )
     }else{
@@ -91,6 +91,7 @@ export default class Chat extends Component {
     )
   }
   render() {
+    const { navigation } = this.props
     return (
       <View style={{ flex: 1, position: 'relative' }}>
         <View style={{alignItems:'flex-end'}}>

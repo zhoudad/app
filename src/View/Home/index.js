@@ -1,93 +1,73 @@
 import React, { Component } from 'react';
-import {createMaterialTopTabNavigator,createAppContainer} from 'react-navigation'
+import { createMaterialTopTabNavigator, createAppContainer } from 'react-navigation'
 import RecommendScreen from './Recommend'
 import AttentionScreen from './Attention'
-import WorldScreen from './World'
+import TopicScreen from './Topic'
 import Header from '../../components/HeaderSearch'
+import ScrollableTabView,
+{
+  DefaultTabBar,
+  ScrollableTabBar
+} from 'react-native-scrollable-tab-view';
 import { View, Text, TouchableOpacity, KeyboardAvoidingView, FlatList, TextInput, Dimensions, StyleSheet } from 'react-native';
 const screenWidth = Dimensions.get('window').width
-const City = ['北京', '上海', '深圳', '武汉', '广州', '杭州', '重庆', '天津']
-const TabContent= createMaterialTopTabNavigator ({
-  Recommend: {
-    screen: RecommendScreen,
-    navigationOptions: {
-      tabBarLabel: '推荐'
-    }
-  },
-  Attention: {
-    screen: AttentionScreen,
-    navigationOptions: {
-      tabBarLabel: '关注'
-    }
-  },
-  World: {
-    screen: WorldScreen,
-    navigationOptions: {
-      tabBarLabel: '世界'
-    }
-  },
-},
-  {
-    initialRouteName: 'Recommend',
-    swipeEnabled: true,
-    animationEnabled: true,
-    lazy: false,
-    tabBarPosition:'top',
-    style: {//整体样式
-      backgroundColor: '#51e0ce',
-      width:screenWidth,
-    },
-    indicatorStyle: {//tab下的指示器样式
-      height: 3,
-      backgroundColor: '#fff',
-      width: 30,
-      marginStart:35,
-    },
-    labelStyle: {
-      fontSize: 14,
-      backgroundColor:'#fff'
-    }
-   }
-   
-  )
-
-  const TabInNewMeg = createAppContainer(TabContent);
 export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      City: City,
     };
-  }
-  _renderItem(data) {
-    return (
-      <View style={styles.item}>
-        <Text style={styles.Text}>{data.item}</Text>
-      </View>
-    )
   }
 
   render() {
     return (
-      <View style={{ flex: 1}}>
-        {/* <FlatList
-          data={this.state.City}
-          renderItem={(data) => this._renderItem(data)}
-        /> */}
-        <View style={{paddingVertical:10}}><Header/></View>
-        <View style={{flex:1}}><TabInNewMeg/></View>
+      <View style={{ flex: 1 }}>
+        <Header />
+        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+          <ScrollableTabView
+            style={styles.container}
+            renderTabBar={() => <ScrollableTabBar
+            style={{height:35}} 
+            tabStyle={{height:34,paddingLeft: 15,paddingRight: 15,}}
+            />}
+            tabBarUnderlineStyle={styles.lineStyle}
+            tabBarActiveTextColor='#FFF'//激活时默认选项卡栏文本的颜色
+            tabBarBackgroundColor='#51e0ce'//默认选项卡栏背景的颜色
+            tabBarInactiveTextColor='#F5FCFF'//不活动时默认选项卡栏文本的颜色
+          // tabBarTextStyle = {fontSize:16}
+          >
+            <View style={styles.Screentyle} tabLabel='推荐'>
+              <RecommendScreen />
+            </View>
+            <View style={styles.Screentyle} tabLabel='关注'>
+              <AttentionScreen />
+            </View>
+            <View style={styles.Screentyle} tabLabel='话题'>
+              <TopicScreen />
+            </View>
+          </ScrollableTabView>
+        </View>
       </View>
     );
   }
 }
 const styles = StyleSheet.create({
-  item: {
-    backgroundColor: '#ddd',
-    height: 55,
-    marginLeft: 15,
-    marginRight: 15,
-    marginBottom: 30,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
+  container: {
+    flex: 1,
+    backgroundColor: '#F5FCFF',
+  },
+  lineStyle: {
+    // width: screenWidth / 4,
+    width: 20,
+    height: 2,
+    textAlign: 'center',
+    backgroundColor: '#F5FCFF',
+    marginLeft: 20
+  },
+  Screentyle: {
+    flex: 1,
+    // fontSize: 20,
+    // marginTop: 20,
+    // textAlign: 'center',
+  },
+
 })
